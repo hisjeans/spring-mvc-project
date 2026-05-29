@@ -1,1 +1,3 @@
-spring.application.name=spring-mvc-practice
+spring:
+  application:
+    name=spring-mvc-practice
