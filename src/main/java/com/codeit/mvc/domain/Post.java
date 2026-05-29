@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post {
 
+    @Setter
     private Long id;
     // id는 int로 선언해도 되나 더 넓은 범위까지 허용하기 위해 Long 선언 일반적
     // 기본 타입 long으로도 선언 가능하나 객체 타입 Long으로 선언하면 null이 들어갈 수 있음
@@ -35,4 +36,9 @@ public class Post {
     private String thumbnailPath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // Lombok의 setter는 완전 기본형, 커스텀을 원한다면 직접 setter 구축하자
+    public void setViewCount(){
+        this.viewCount++; // 매개값 받지 않고 viewcount 올리겠다
+    }
 }
