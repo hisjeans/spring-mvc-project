@@ -3,6 +3,7 @@ package com.codeit.mvc.service;
 
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
+import com.codeit.mvc.dto.response.PostResponse;
 import com.codeit.mvc.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,12 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public void getPostById(Long id){
+    public PostResponse getPostById(Long id){
         Post post = postRepository.findById(id) // 객체 제대로 있으면 post에 담고
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다.")); // 없다면 예외 발생
         // if문 사용하지 않고 optional 통해 간단히 표현할 수 있는 것
         post.setViewCount();
+        return PostResponse.from(post);
     }
 
 

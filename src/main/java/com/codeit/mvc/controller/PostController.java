@@ -3,6 +3,7 @@ package com.codeit.mvc.controller;
 import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
+import com.codeit.mvc.dto.response.PostResponse;
 import com.codeit.mvc.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -44,7 +46,7 @@ public class PostController {
 
     @PostMapping
     public String create(PostRequest postRequest, Model model) { // entity는 db쪽과 연관이 깊기 때문에 entity 전달하는 건 위험할 수 있음
-        // @RequestParam String title, @RequestParam String content,....로 받을 수 있지만 많은 값을 받기에는 부적절(한두개 정도는 괜찮다)
+        // @RequestParam String title, @RequestParam String content,....로 낱개로 하나씩 받을 수 있지만 많은 값을 받기에는 부적절(한두개 정도는 괜찮다)
         // post 객체 전송된 데이터 이름, 필드 모두 가지고 있기 때문에 post란 객체로 포장해 전달받겠다 log.info - @Setter 필요 - null 들어갈 수 있음, null pointer exception 발생 문제
         log.info("/posts: Post, 전달된 값: {}", postRequest);
         Post post=postService.createPost(postRequest);
@@ -58,10 +60,26 @@ public class PostController {
         // redirect://posts: 응답을 클라이언트로 내보낸 후 자동 재요청으로 /posts 요청이 들어오도록 유도해달라
         // 내가 가진 파일이 아닌 경로로 응답이 나가고 이 경로로 자동 재요청 들어오도록 요구
     }
+    // client -post->
+    // <-redirect-
+    // -/posts:Get->
+    // <-list.html-
+    // 사용자는 글 등록 완료 후 글 등록이 완료된 글까지 포함된 화면을 볼 수 있음
+    // 이때 사용되는 것이 redirect
 
     @GetMapping("/{id}")
-    public String detail (@PathVariable Long id){
-        postService.getPostById(id); // 기본적으로 controller가 service에 의존
+    public String detail (@PathVariable Long id, Model model){ // url에 작성되어 있는 특정 값을 얻어오기 위해 @PathVariable
+        PostResponse resDto = postService.getPostById(id);// 기본적으로 controller가 service에 의존
+// return post; 가능은 하나, 요청을 받을 때도 DTO를 받았기 때문에 응답을 받을 때도 DTO로 받는 것이 좋음
+        // 글 상세 보여주는 페이지에서 모든 정보가 필요하지 않을 수 있음
+        // entity 원본을 전달하는 것은 지양하자‼️
+        // 각각의 응답에 맞는 것을 리턴해주자
+        model.addAttribute("post", resDto);
+        model.addAttribute("pageTitle", resDto.getTitle());
+
+        model.addAttribute("comments", new ArrayList<>()); // 댓글 없다 가정하고 빈 리스트 생성
+        return "posts/detail";
     }
+
 
 }

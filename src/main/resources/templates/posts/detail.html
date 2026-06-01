@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${post.title}">게시글 상세</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen, Ubuntu, sans-serif;
+      line-height: 1.8;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-5px);
+    }
+
+    .post-container {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-header {
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .post-category {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .post-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 25px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .post-meta span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .post-thumbnail {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .post-content {
+      padding: 40px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .post-actions {
+      padding: 20px 40px;
+      border-top: 1px solid #ecf0f1;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-outline {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-outline:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .comments-section {
+      padding: 40px;
+      background: #f8f9fa;
+    }
+
+    .comments-header {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .comment-form {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .comment-form input,
+    .comment-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .comment-form input:focus,
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .comment-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .comment-item {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+
+    .comment-item:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .comment-date {
+      font-size: 13px;
+      color: #7f8c8d;
+    }
+
+    .comment-content {
+      color: #2c3e50;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .btn-delete-comment {
+      padding: 6px 12px;
+      font-size: 12px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-delete-comment:hover {
+      background: #c0392b;
+    }
+
+    @media (max-width: 768px) {
+      .post-title {
+        font-size: 1.8rem;
+      }
+
+      .post-content,
+      .post-header,
+      .comments-section {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="/posts" class="back-button"> ← 목록으로 돌아가기 </a>
+
+  <div class="post-container">
+    <div class="post-header">
+          <span class="post-category" th:text="${post.category.displayName}"
+          >카테고리</span
+          >
+      <h1 class="post-title" th:text="${post.title}">게시글 제목</h1>
+      <div class="post-meta">
+        <span>👤 <span th:text="${post.author}">작성자</span></span>
+        <span>👁 <span th:text="${post.viewCount}">0</span></span>
+        <span
+        >📅
+              <span
+                      th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"
+              >날짜</span
+              ></span
+        >
+      </div>
+    </div>
+
+    <img
+            th:if="${post.thumbnailPath != null}"
+            th:src="@{/images/{filename}(filename=${post.thumbnailPath})}"
+            alt="썸네일"
+            class="post-thumbnail"
+    />
+
+    <div class="post-content" th:text="${post.content}">
+      게시글 내용이 여기에 표시됩니다.
+    </div>
+
+    <div class="post-actions">
+      <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn">수정</a>
+      <form
+              th:action="@{/posts/{id}/delete(id=${post.id})}"
+              method="post"
+              style="display: inline"
+      >
+        <button
+                type="submit"
+                class="btn btn-danger"
+                onclick="return confirm('정말 삭제하시겠습니까?')"
+        >
+          삭제
+        </button>
+      </form>
+      <a href="/posts" class="btn btn-outline">목록</a>
+    </div>
+
+    <div class="comments-section">
+      <h3 class="comments-header">
+        💬 댓글
+        <span style="color: #667eea" th:text="${comments.size()}">0</span>
+      </h3>
+
+      <div class="comment-form">
+        <form
+                th:action="@{/posts/{id}/comments(id=${post.id})}"
+                method="post"
+        >
+          <input type="text" name="author" placeholder="작성자" required />
+          <textarea
+                  name="content"
+                  placeholder="댓글을 입력하세요..."
+                  required
+          ></textarea>
+          <button type="submit" class="btn">댓글 작성</button>
+        </form>
+      </div>
+
+      <div th:if="${!comments.empty}">
+        <div th:each="comment : ${comments}" class="comment-item">
+          <div class="comment-header">
+                <span class="comment-author" th:text="${comment.author}"
+                >작성자</span
+                >
+            <span
+                    class="comment-date"
+                    th:text="${#temporals.format(comment.createAt, 'yyyy-MM-dd HH:mm')}"
+            >날짜</span
+            >
+          </div>
+          <p class="comment-content" th:text="${comment.content}">
+            댓글 내용
+          </p>
+          <form
+                  th:action="@{/posts/{postId}/comments/{id}/delete(postId=${post.id}, id=${comment.id})}"
+                  method="post"
+                  style="display: inline"
+          >
+            <button type="submit" class="btn-delete-comment">삭제</button>
+          </form>
+        </div>
+      </div>
+
+      <div
+              th:if="${comments.empty}"
+              style="text-align: center; color: #7f8c8d; padding: 30px"
+      >
+        아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
