@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 // 모든 필드에 사용하는 것은 지양하자
 // ⚠️ 특히 id는 주의 필요️
 @AllArgsConstructor
+@ToString
 public class Post {
 
     @Setter
