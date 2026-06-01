@@ -1,9 +1,6 @@
 package com.codeit.mvc.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +15,6 @@ import java.time.LocalDateTime;
 // 필요한 필드에만 선택적으로 생성함 (예: 썸네일경로 DB에서 조금 더 추가되어야 한다, 가공되어야 한다)
 // 모든 필드에 사용하는 것은 지양하자
 // ⚠️ 특히 id는 주의 필요️
-@NoArgsConstructor
 @AllArgsConstructor
 public class Post {
 
@@ -36,6 +32,25 @@ public class Post {
     private String thumbnailPath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Post(){
+        this.viewCount=0;
+        this.createdAt=LocalDateTime.now();
+        this.updatedAt=LocalDateTime.now();
+        // 매개값으로 넘어오는 것이 없다 하더라도 위처럼 설정되도록 하기 위함
+
+    }
+
+    // 글 등록할 때 title, content, author, category, thumnailPath 만 넘어옴 - client
+    // 우선 thumbnailPath는 제외하고 삭제
+    public Post(String title, String content, String author, Category category){
+        this(); // viewCount, createdAt, updatedAt 설정하고 나서 아래 설정하겠다는 의미
+        this.title=title;
+        this.content=content;
+        this.author=author;
+        this.category=category;
+
+    }
 
     // Lombok의 setter는 완전 기본형, 커스텀을 원한다면 직접 setter 구축하자
     public void setViewCount(){

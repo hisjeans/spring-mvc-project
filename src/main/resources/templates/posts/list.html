@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- title 이라는 태그에 기본값으로 '블로그' 텍스트가 작성되어 있는데,
+      model(<-dispatcher) 객체에 혹시 pageTitle이라는 이름의 데이터가 있다면 그 데이터 값으로 텍스트를 표현해라. -->
+  <title th:text="${pageTitle}">블로그</title>
+<!--  th 속성 - thymleaf 문법, 모델에 있는 데이터 꺼내는 문법 -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem 0;
+      margin-bottom: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #667eea;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    nav a:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .search-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-form input,
+    .search-form select {
+      padding: 12px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-form input:focus,
+    .search-form select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .search-form input[type='text'] {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .category-filter {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .btn-outline {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-outline:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-outline.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .post-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-thumbnail {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+
+    .post-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .post-content {
+      padding: 20px;
+    }
+
+    .post-category {
+      display: inline-block;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .post-title {
+      font-size: 1.4rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 15px;
+      color: #7f8c8d;
+      font-size: 13px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ecf0f1;
+    }
+
+    .post-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-state h3 {
+      color: #667eea;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-form {
+        flex-direction: column;
+      }
+
+      .search-form input,
+      .search-form select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div style="padding: 0 20px">
+      <h1>📝 My Blog</h1>
+      <nav>
+        <a href="/posts">홈</a>
+        <a href="/posts/new">새 글 작성</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="search-section">
+    <form action="/posts/search" method="get" class="search-form">
+      <input
+              type="text"
+              name="keyword"
+              th:value="${keyword}"
+              placeholder="검색어를 입력하세요..."
+      />
+      <select name="sort">
+        <option value="latest" th:selected="${sort == 'latest'}">
+          최신순
+        </option>
+        <option value="viewCount" th:selected="${sort == 'viewCount'}">
+          조회수순
+        </option>
+      </select>
+      <button type="submit" class="btn">검색</button>
+    </form>
+
+    <div class="category-filter">
+      <span style="color: #7f8c8d; font-weight: 500">카테고리:</span>
+      <a
+              href="/posts"
+              class="btn btn-small btn-outline"
+              th:classappend="${category == null} ? 'active' : ''"
+      >전체</a
+      >
+      <a
+              th:each="cat : ${T(com.codeit.mvc.domain.Category).values()}"
+              th:href="@{/posts/search(category=${cat})}"
+              th:text="${cat.displayName}"
+              class="btn btn-small btn-outline"
+              th:classappend="${cat == category} ? 'active' : ''"
+      >
+      </a>
+    </div>
+  </div>
+
+  <!-- model에 있는 posts라는 데이터가 비어있다면 해당 html을 표현하지 마라. (조건부 렌더링) -->
+  <div th:if="${!posts.empty}" class="posts-grid">
+    <!-- th:each를 통해 태그를 반복해서 표현하는 것이 가능 (향상 for문과 유사)
+        변수 이름(post)을 통해서 객체의 필드를 꺼내서 표현하는 것이 가능(getter 호출, get 붙이지 않고 필드 이름으로) -->
+    <div
+            th:each="post : ${posts}"
+            class="post-card"
+            th:onclick="'location.href=\'/posts/' + ${post.id} + '\''"
+    >
+      <div class="post-thumbnail">
+        <img
+                th:if="${post.thumbnailPath != null}"
+                th:src="@{/images/{filename}(filename=${post.thumbnailPath})}"
+                alt="썸네일"
+        />
+        <span th:unless="${post.thumbnailPath != null}">📝</span>
+      </div>
+      <div class="post-content">
+            <span class="post-category" th:text="${post.category.displayName}"
+            >카테고리</span
+            >
+        <h3 class="post-title" th:text="${post.title}">게시글 제목</h3>
+        <div class="post-meta">
+          <span>👤 <span th:text="${post.author}">작성자</span></span>
+          <span>👁 <span th:text="${post.viewCount}">0</span></span>
+          <span
+          >📅
+            <!-- temporals: java.time 패키지 객체를 다루는 유틸리티 객체 -->
+                <span th:text="${#temporals.format(post.createdAt, 'MM-dd')}"
+                >날짜</span
+                ></span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:if="${posts.empty}" class="empty-state">
+    <h3>😢 게시글이 없습니다</h3>
+    <p style="color: #7f8c8d; margin-bottom: 20px">
+      첫 번째 게시글을 작성해보세요!
+    </p>
+    <a href="/posts/new" class="btn">새 글 작성하기</a>
+  </div>
+</div>
+
+<script>
+  // 카드 클릭 애니메이션
+  document.querySelectorAll('.post-card').forEach((card) => {
+    card.style.cursor = 'pointer';
+  });
+</script>
+</body>
+</html>

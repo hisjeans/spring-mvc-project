@@ -6,7 +6,7 @@ import com.codeit.mvc.domain.Post;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRespository {
+public interface PostRepository {
 
     // 전체 조회
     List<Post> findAll();

@@ -2,6 +2,7 @@ package com.codeit.mvc.repository;
 
 import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class MemoryPostRespository implements PostRespository{
+@Repository // @Component 가능하나 repository 기능 의미 부여 목적으로 @Repository
+public class MemoryPostRepository implements PostRepository{
 
     // 객체 바꿀 수 없도록 private final
     // 맵의 키만으로 포스트번호 조회 가능하도록
