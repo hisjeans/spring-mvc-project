@@ -81,6 +81,38 @@ public class FileService {
             throw new RuntimeException("파일 저장 실패: "+originFileName, e);
         }
     }
+    public ResponseEntity<Resource> getImage(String fileName) {
+        Path requested = uploadPath.resolve(fileName).normalize();
+
+        if (!Files.exists(requested) || Files.isDirectory(requested)) { // 실제 경로에 파일이 없거나 찾아보니 파일이 아닌 폴더 경로라면
+            return ResponseEntity.notFound().build();
+        }
+
+        // if문 실행되지 않았다면 제대로 파일을 받은 것
+        try {
+            Resource resource = new UrlResource(requested.toUri());
+
+            // 파일의 Content-type이 무엇인지를 정확하게 알려줘야 img 태그가 제대로 화면에 렌더링할 수 있음
+            // contentType은 다음과 같이 나올 것: "image/jpg", "text/html", "image/png", "application/json"
+            String contentType = Files.probeContentType(requested);
+
+            // 위에서 판단한 Content-Type이 무엇인지 확인이 되지 않을 때는
+            // MediaType.APPLICATION_OCTECT_STREAM: 가공되지 않은 순수한 이진 데이터(Binary Data) 스트림으로 취급
+            // Media
+            MediaType mediaType = (contentType == null) ?
+                    MediaType.APPLICATION_OCTET_STREAM
+                    : MediaType.parseMediaType(contentType);
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .body(resource);
+
+        } catch (IOException e) {
+            log.error("파일 응답 실패: fileName={}", fileName, e);
+            return ResponseEntity.internalServerError().build();
+        }
+
+
+    }
 
 
 }
