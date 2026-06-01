@@ -16,12 +16,13 @@ import lombok.ToString;
 // DTO가 나중에 API 스펙이 될 수 있음
 @Setter
 @Getter
-@ToString
+@ToString // lombok 사용해 직접 사용하지 않아도 되게끔 함
 public class PostRequest {
 
     private String title;
     private String content;
     private String author;
     private Category category;
+    private String thumbnailPath;
 
 }

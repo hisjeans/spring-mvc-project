@@ -67,7 +67,8 @@ public class PostService {
                 postRequest.getTitle(),
                 postRequest.getContent(),
                 postRequest.getAuthor(),
-                postRequest.getCategory()
+                postRequest.getCategory(),
+                postRequest.getThumbnailPath()
         );
         return postRepository.save(post);
     }

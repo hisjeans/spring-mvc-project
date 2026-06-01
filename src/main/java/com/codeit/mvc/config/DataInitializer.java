@@ -23,7 +23,8 @@ public class DataInitializer {
                     "Spring MVC는 웹 애플리케이션을 개발하기 위한 강력한 프레임워크입니다. " +
                             "Model-View-Controller 패턴을 기반으로 하여 관심사의 분리를 통해 유지보수가 쉬운 코드를 작성할 수 있습니다.",
                     "김개발",
-                    Category.TECH
+                    Category.TECH,
+                    null
             );
             postRepository.save(post1);
 
@@ -32,7 +33,8 @@ public class DataInitializer {
                     "REST는 Representational State Transfer의 약자로, 웹의 장점을 최대한 활용할 수 있는 아키텍처 스타일입니다. " +
                             "HTTP 메서드를 적절히 사용하고, 리소스 중심의 URL 설계가 핵심입니다.",
                     "박코딩",
-                    Category.TECH
+                    Category.TECH,
+                    null
             );
             postRepository.save(post2);
 
@@ -41,7 +43,8 @@ public class DataInitializer {
                     "제주도의 아름다운 자연을 만끽하고 왔습니다. 한라산 등반과 바다 드라이브가 특히 인상 깊었습니다. " +
                             "맛있는 현지 음식들도 많이 먹어보았는데, 흑돼지 고기와 해산물이 일품이었습니다.",
                     "이여행",
-                    Category.TRABLE
+                    Category.TRABLE,
+                    null
             );
             postRepository.save(post3);
 
@@ -51,7 +54,8 @@ public class DataInitializer {
                             "신선한 재료와 올바른 조리법만 알면 누구나 쉽게 만들 수 있어요. " +
                             "오늘은 크림 파스타 레시피를 공유합니다.",
                     "최요리",
-                    Category.FOOD
+                    Category.FOOD,
+                    null
             );
             postRepository.save(post4);
 
@@ -61,7 +65,8 @@ public class DataInitializer {
                             "하루에 30분씩이라도 책을 읽으니 생활에 활력이 생기는 것 같아요. " +
                             "여러분도 새로운 취미를 시작해보시는 건 어떨까요?",
                     "정일상",
-                    Category.LIFE
+                    Category.LIFE,
+                    null
             );
             postRepository.save(post5);
 
@@ -71,7 +76,8 @@ public class DataInitializer {
                             "조리개, 셔터 스피드, ISO 등 기본적인 개념들을 이해하면 " +
                             "훨씬 더 좋은 사진을 찍을 수 있습니다.",
                     "강사진",
-                    Category.HOBBY
+                    Category.HOBBY,
+                    null
             );
             postRepository.save(post6);
 
@@ -81,7 +87,8 @@ public class DataInitializer {
                             "@SpringBootApplication 어노테이션 하나로 수많은 설정이 자동으로 이루어집니다. " +
                             "오늘은 이 자동 설정의 원리에 대해 알아보겠습니다.",
                     "김개발",
-                    Category.TECH
+                    Category.TECH,
+                    null
             );
             postRepository.save(post7);
 
@@ -90,7 +97,8 @@ public class DataInitializer {
                     "아침을 거르지 않고 건강하게 먹는 것이 하루를 시작하는 가장 좋은 방법입니다. " +
                             "간단하지만 영양가 있는 아침 메뉴들을 소개합니다.",
                     "최요리",
-                    Category.FOOD
+                    Category.FOOD,
+                    null
             );
             postRepository.save(post8);
 

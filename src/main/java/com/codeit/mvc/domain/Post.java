@@ -47,12 +47,13 @@ public class Post {
     // class 단에 @Builder를 붙이면 모든 필드를 초기화할 수 있는 Builder 패턴 완성
     // 생성자에 @Builder를 붙이면 생성자로 전달되는 매개값만 초기화하는 Builder 패턴 완성 -> 이 방식을 선호
     @Builder
-    public Post(String title, String content, String author, Category category){
+    public Post(String title, String content, String author, Category category, String thumbnailPath){
         this(); // viewCount, createdAt, updatedAt 설정하고 나서 아래 설정하겠다는 의미
         this.title=title;
         this.content=content;
         this.author=author;
         this.category=category;
+        this.thumbnailPath=thumbnailPath;
 
     }
 

@@ -4,12 +4,14 @@ import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
 import com.codeit.mvc.dto.response.PostResponse;
+import com.codeit.mvc.service.FileService;
 import com.codeit.mvc.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService; // post controller는 postservice에 의존
+    private final FileService fileService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) { // dispatcher suvlet이 model 전달
@@ -45,10 +48,21 @@ public class PostController {
     }
 
     @PostMapping
-    public String create(PostRequest postRequest, Model model) { // entity는 db쪽과 연관이 깊기 때문에 entity 전달하는 건 위험할 수 있음
+    public String create(PostRequest postRequest,
+                         @RequestParam(value = "thumbnail", required = false) MultipartFile file, // 이미지 파일 한꺼번에 포함시키지 않고 dto에 따로 받아볼 것
+                         Model model) { // entity는 db쪽과 연관이 깊기 때문에 entity 전달하는 건 위험할 수 있음
         // @RequestParam String title, @RequestParam String content,....로 낱개로 하나씩 받을 수 있지만 많은 값을 받기에는 부적절(한두개 정도는 괜찮다)
         // post 객체 전송된 데이터 이름, 필드 모두 가지고 있기 때문에 post란 객체로 포장해 전달받겠다 log.info - @Setter 필요 - null 들어갈 수 있음, null pointer exception 발생 문제
         log.info("/posts: Post, 전달된 값: {}", postRequest);
+
+        // 파일 얿로드 처리
+        if (file != null && !file.isEmpty()) {
+            String fileName = fileService.saveFile(file);
+            postRequest.setThumbnailPath(fileName);
+        }
+
+
+
         Post post=postService.createPost(postRequest);
 
         // return "posts/list";

@@ -1,3 +1,13 @@
 spring:
   application:
     name=spring-mvc-practice
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB # 한 파일 당 5MB 넘길 수 없다는 설정
+      max-request-size: 20MB # 한 요청 당 20MB 넘길 수 없다는 설정
+
+blog:
+  file-directory: /Users/apple/Desktop/codeit13-develop/spring-upload
+#  내부경로는 노출되어 있는 것보다 숨기는 것이 좋기 때문에 yml 파일로 작성하고 나중에 yml 파일을 ignore하면 되는 것
