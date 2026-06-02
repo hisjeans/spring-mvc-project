@@ -14,15 +14,22 @@ import lombok.ToString;
 // 반대로 entity 보다 더 많은 정보 요청될 수 있음
 // 문제 3. 화면단에서 요구하는 데이터가 Entity보다 더 적을 수도 있고, 더 많을 수도 있다
 // DTO가 나중에 API 스펙이 될 수 있음
-@Setter
-@Getter
-@ToString // lombok 사용해 직접 사용하지 않아도 되게끔 함
-public class PostRequest {
 
-    private String title;
-    private String content;
-    private String author;
-    private Category category;
-    private String thumbnailPath;
+public record PostRequest (
 
+    String title,
+    String content,
+    String author,
+    Category category,
+    String thumbnailPath
+
+) {
+    // body는 없으면 적지 않아도 됨
+    // 문제: setter가 없어지지 않나? - record는 불변 객체, setter 지원하지 않음
+    public PostRequest withThumbnailPath(String fileName){
+        return  new PostRequest(title, content, author, category, thumbnailPath);
+        // 레코드는 특정 필드만 변경하는 setter는 제공되지 않음 - private final
+        // 아예 새로운 객체로
+    }
 }
+// 새로운 클래스를 제작하는데 DTO를 제작하고 싶다면 -> record로 작성핮

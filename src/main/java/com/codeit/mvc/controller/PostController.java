@@ -58,7 +58,7 @@ public class PostController {
         // 파일 얿로드 처리
         if (file != null && !file.isEmpty()) {
             String fileName = fileService.saveFile(file);
-            postRequest.setThumbnailPath(fileName);
+            postRequest = postRequest.withThumbnailPath(fileName);
         }
 
 
@@ -89,7 +89,8 @@ public class PostController {
         // entity 원본을 전달하는 것은 지양하자‼️
         // 각각의 응답에 맞는 것을 리턴해주자
         model.addAttribute("post", resDto);
-        model.addAttribute("pageTitle", resDto.getTitle());
+        model.addAttribute("pageTitle", resDto.title()); // 레코드에서 제공하는 getter는 "get(title, content, author...)" "get" 붙지 않음
+        // 필드명과 동일
 
         model.addAttribute("comments", new ArrayList<>()); // 댓글 없다 가정하고 빈 리스트 생성
         return "posts/detail";
