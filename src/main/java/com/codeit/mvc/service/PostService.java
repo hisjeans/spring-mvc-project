@@ -63,13 +63,13 @@ public class PostService {
 
     public Post createPost(PostRequest postRequest) {
 
-        Post post = new Post(
-                postRequest.getTitle(),
-                postRequest.getContent(),
-                postRequest.getAuthor(),
-                postRequest.getCategory(),
-                postRequest.getThumbnailPath()
-        );
+        Post post = Post.builder()
+                .author(postRequest.author())
+                .title(postRequest.title())
+                .content(postRequest.content())
+                .category(postRequest.category())
+                .thumbnailPath(postRequest.thumbnailPath())
+                .build();
         return postRepository.save(post);
     }
 

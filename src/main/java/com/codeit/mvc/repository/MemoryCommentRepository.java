@@ -2,6 +2,7 @@ package com.codeit.mvc.repository;
 
 import com.codeit.mvc.domain.Comment;
 import com.codeit.mvc.domain.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+@Repository
 public class MemoryCommentRepository implements CommentRepository {
 
     private final Map<Long, Comment> store=new ConcurrentHashMap<>();

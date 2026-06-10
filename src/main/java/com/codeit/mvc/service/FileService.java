@@ -7,6 +7,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,6 +91,7 @@ public class FileService {
 
         // if문 실행되지 않았다면 제대로 파일을 받은 것
         try {
+            byte[] bytes= FileCopyUtils.copyToByteArray(Files.newInputStream(requested));
             Resource resource = new UrlResource(requested.toUri());
 
             // 파일의 Content-type이 무엇인지를 정확하게 알려줘야 img 태그가 제대로 화면에 렌더링할 수 있음

@@ -3,7 +3,9 @@ package com.codeit.mvc.controller;
 import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
+import com.codeit.mvc.dto.response.CommentResponse;
 import com.codeit.mvc.dto.response.PostResponse;
+import com.codeit.mvc.service.CommentService;
 import com.codeit.mvc.service.FileService;
 import com.codeit.mvc.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class PostController {
 
     private final PostService postService; // post controller는 postservice에 의존
     private final FileService fileService;
+    private final CommentService commentService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) { // dispatcher suvlet이 model 전달
@@ -88,11 +91,13 @@ public class PostController {
         // 글 상세 보여주는 페이지에서 모든 정보가 필요하지 않을 수 있음
         // entity 원본을 전달하는 것은 지양하자‼️
         // 각각의 응답에 맞는 것을 리턴해주자
+        // 댓글 추가로 가져와야 함
+        List<CommentResponse> dtoList = commentService.getCommentsByPostId(id);
         model.addAttribute("post", resDto);
         model.addAttribute("pageTitle", resDto.title()); // 레코드에서 제공하는 getter는 "get(title, content, author...)" "get" 붙지 않음
         // 필드명과 동일
 
-        model.addAttribute("comments", new ArrayList<>()); // 댓글 없다 가정하고 빈 리스트 생성
+        model.addAttribute("comments", dtoList); // 댓글 없다 가정하고 빈 리스트 생성
         return "posts/detail";
     }
 
@@ -121,5 +126,30 @@ public class PostController {
 
     }
 
+    /// ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @return
+
+    // 댓글 관련 엔드포인트(컨트롤러가 접근할 수 있는 지점, 데이터를 요청하고 받을 수 있는 지점)
+    // == 댓글 관련 요청을 받을 수 있는 매핑 메소드 작성할 것
+    // 예: creat는 게시글 작성의 end point
+    // 여러가지 end point => ApplicationProgramInterface
+    // 인터페이스는 형태, 규칙, 틀
+    // 웹에서 서로 다른 데이터 통신 교환 규칙 => web api
+    // -> controller
+
+    // 댓글 작성
+    @PostMapping("/{id}/comments")
+    public String addComment(@PathVariable Long id,
+                             @RequestParam String author, // dto로 작성할 수 있지만 값이 적을 경우는 @RequestParam 사용
+                             @RequestParam String content){
+        log.info("POST /posts{}/comments - author: {}", id, author);
+        // sout(출력 기능 밖에 없음) 대신 log.info(로그 레벨, 어느 클래스에서 출력되었는지, 출력 시간, 로그만 모아 파일로 출력 가능) 사용
+        CommentResponse resDto = commentService.createComment(id, author, content);
+        // 댓글 작성이 완료된 후 return "posts/detail" 게시물 상세 보기에 대한 내용까지 포함시켜야 하기 때문에 게시물 조회 로직을 새로 쓸 필요 없어 게시물 상세 보기 요청이 다시 들어오도록 함(detail 메서드)
+        return "redirect:/posts/"+id;
+    }
+
+    // 댓글 삭제
 
 }
