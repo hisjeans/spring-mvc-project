@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>404 · 찾을 수 없음</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+        }
+        .error-box {
+            background: #fff; border-radius: 16px; padding: 48px 56px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15); text-align: center; max-width: 480px;
+            border-top: 6px solid #667eea;   /* 404 = 파랑 계열 */
+        }
+        .error-icon { font-size: 3rem; margin-bottom: 8px; }
+        .error-status { font-size: 3.5rem; font-weight: 700; color: #667eea; line-height: 1; }
+        .error-title { font-size: 1.4rem; font-weight: 600; color: #333; margin: 12px 0 8px; }
+        .error-message { font-size: 1rem; color: #777; margin-bottom: 28px; line-height: 1.6; }
+        .error-link {
+            display: inline-block; padding: 12px 24px; background: #667eea; color: #fff;
+            text-decoration: none; border-radius: 8px; transition: all 0.2s;
+        }
+        .error-link:hover { background: #5568d3; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <div class="error-icon">🔍</div>
+        <div class="error-status">404</div>
+        <p class="error-title">페이지를 찾을 수 없어요</p>
+        <!-- 전역 핸들러가 model 에 담아 준 구체적 메시지 (예: "게시글을 찾을 수 없습니다. id=999") -->
+        <p class="error-message" th:text="${message}">요청하신 게시글이 없습니다.</p>
+        <a class="error-link" href="/posts">← 게시글 목록으로</a>
+    </div>
+</body>
+</html>

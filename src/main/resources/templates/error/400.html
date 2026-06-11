@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>400 · 잘못된 요청</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+        }
+        .error-box {
+            background: #fff; border-radius: 16px; padding: 48px 56px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15); text-align: center; max-width: 480px;
+            border-top: 6px solid #f0883e;   /* 400 = 주황 계열 */
+        }
+        .error-icon { font-size: 3rem; margin-bottom: 8px; }
+        .error-status { font-size: 3.5rem; font-weight: 700; color: #f0883e; line-height: 1; }
+        .error-title { font-size: 1.4rem; font-weight: 600; color: #333; margin: 12px 0 8px; }
+        .error-message { font-size: 1rem; color: #777; margin-bottom: 28px; line-height: 1.6; }
+        .error-link {
+            display: inline-block; padding: 12px 24px; background: #f0883e; color: #fff;
+            text-decoration: none; border-radius: 8px; transition: all 0.2s;
+        }
+        .error-link:hover { background: #dd741f; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <div class="error-icon">⚠️</div>
+        <div class="error-status">400</div>
+        <p class="error-title">요청에 문제가 있어요</p>
+        <!-- 잘못된 입력 메시지 (예: "허용되지 않는 파일 형식입니다: .exe", "댓글 내용은 비워둘 수 없습니다.") -->
+        <p class="error-message" th:text="${message}">입력하신 값을 다시 확인해 주세요.</p>
+        <a class="error-link" href="/posts">← 게시글 목록으로</a>
+    </div>
+</body>
+</html>

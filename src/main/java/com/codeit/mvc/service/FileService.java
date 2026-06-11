@@ -1,5 +1,6 @@
 package com.codeit.mvc.service;
 
+import com.codeit.mvc.exception.FileStorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -40,7 +41,7 @@ public class FileService {
             Files.createDirectories(uploadPath);
             log.info("업로드 디렉토리 준비 완료: {}", uploadPath);
         } catch (IOException e) {
-            throw new RuntimeException("업로드 디렉토리 생성 실패: "+uploadPath, e);
+            throw new FileStorageException("업로드 디렉토리 생성 실패: " + uploadPath, e);
         }
 
     }
@@ -65,7 +66,7 @@ public class FileService {
         // 허용 확장자 검증
         if (!ALLOWED_EXTENSIONS.contains(extension)){
             throw new IllegalArgumentException("허용되지 않는 파일 형식입니다: "+extension); // +) set으로 확장자 명시해줘도 보기 좋음
-        }
+        } // 잘못된 입력값이기 때문에 IllegalArgumentException 으로 가도 되고 FileStorageException으로 통일시켜도 무방
 
         // 유효성 검증 로직
 
@@ -79,7 +80,7 @@ public class FileService {
             log.info("파일 저장 완료: {} (원본: {}, 크기: {} bytes", savedFileName, originFileName, file.getSize());
             return savedFileName; // 파일 저장이 완료되면 새로운 파일명을 리턴 -> DB 저장(현재는 우선 맵에 저장)
         } catch (IOException e) {
-            throw new RuntimeException("파일 저장 실패: "+originFileName, e);
+            throw new FileStorageException("파일 저장 실패: "+originFileName, e); // 예외 객체를 넘겨 어디에서 어떤 식으로 발생했는지 확인
         }
     }
     public ResponseEntity<Resource> getImage(String fileName) {

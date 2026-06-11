@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// json 타입으로 데이터
 // 업로드된 이미지 파일을 바이너리로 응답하는 컨트롤러
 @RestController
 @RequestMapping("/images")
