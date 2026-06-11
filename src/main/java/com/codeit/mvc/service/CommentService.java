@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +56,12 @@ public class CommentService {
 //            dtoList.add(dto);
 //        }
 //        return dtoList;
+    }
+
+    public void deleteComment(Long id) {
+        commentRepository.findById(id)
+                        .orElseThrow(()->new IllegalArgumentException("존재하지 않는 댓글입니다. id="+id));
+        // 확인 후 삭제하면 되기 때문에 지역변수는 굳이 선언해 받을 필요 없다
+        commentRepository.deleteById(id); // id에 문제가 없으면 삭제할 것
     }
 }

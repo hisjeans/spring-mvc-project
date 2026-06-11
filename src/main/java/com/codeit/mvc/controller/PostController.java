@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -151,5 +150,11 @@ public class PostController {
     }
 
     // 댓글 삭제
+    @PostMapping("{postId}/comments/{id}/delete")
+    public String deleteComment(@PathVariable Long postId, @PathVariable Long id){
+        commentService.deleteComment(id); // 댓글 구분할 수 있는 고유 아이디 존재하기 때문에 postId까지 전달할 필요는 없는 것
+        // 댓글 삭제 이후 새로운 화면이 아닌 게시글 삭제 안에서 댓글 삭제 확인 필요
+        return "redirect:/posts/"+postId;
+    }
 
 }
